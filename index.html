@@ -34,9 +34,22 @@
     // Define the tile layer. Use a relative path pointing to the tiles directory
     // that will reside in the same GitHub repository. The pattern {z}/{x}/{y}.png
     // corresponds to the Zoom level, tile column (x) and row (y).
+    // Configure the tile layer.  To make the map look crisp on high?resolution
+    // (retina/HiDPI) displays, enable the `detectRetina` option and adjust
+    // the zoom limits.  When `detectRetina` is true Leaflet will request tiles
+    // from the next zoom level and downscale them to match the device pixel ratio
+    //Åy219735214371838ÅıL759-L812Åz.  To ensure Leaflet doesnÅft try to fetch
+    // non?existent tiles when zooming on a retina device, set `maxZoom` one
+    // level higher than the available tiles and provide a `maxNativeZoom` so
+    // higher zoom requests fall back to the highest available tile level
+    //Åy740450393045018ÅıL140-L187Åz.  This keeps the map sharp on
+    // smartphones without over?requesting data.
     var tilesource_layer = L.tileLayer('./kodaira_tiles/{z}/{x}/{y}.png', {
         minZoom: 14,
-        maxZoom: 18,
+        // Allow one extra zoom level on retina displays; otherwise stay at 18
+        maxZoom: L.Browser.retina ? 19 : 18,
+        maxNativeZoom: 18,
+        detectRetina: true,
         tms: false,
         attribution: 'Created by QGIS'
     }).addTo(map);
